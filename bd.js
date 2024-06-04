@@ -1,6 +1,4 @@
-const { now } = require('moment');
 const { Pool } = require('pg');
-
 
 const config = {
     user: process.env.USERDB, 
@@ -14,8 +12,8 @@ const pool = new Pool(config);
 
 const insertarUsuario = async (payload) =>
 {
-    text = "INSERT INTO usuarios(nombre, balance) VALUES($1, $2) RETURNING *";
-    values = [payload.nombre, payload.balance];
+    const text = "INSERT INTO usuarios(nombre, balance) VALUES($1, $2) RETURNING *";
+    const values = [payload.nombre, payload.balance];
 
     const queryObject = {
         text : text,
@@ -28,8 +26,8 @@ const insertarUsuario = async (payload) =>
 
 const buscarUsuarios = async () =>
 {
-    text = "SELECT * FROM usuarios";
-    values = [];
+    const text = "SELECT * FROM usuarios";
+    const values = [];
 
     const queryObject = {
         text : text,
@@ -42,8 +40,8 @@ const buscarUsuarios = async () =>
 
 const editarUsuario = async (payload) =>
 {
-    text = "UPDATE usuarios SET nombre=$1, balance=$2 WHERE id = $3 RETURNING *";
-    values = [payload.name, payload.balance, payload.id];
+    const text = "UPDATE usuarios SET nombre=$1, balance=$2 WHERE id = $3 RETURNING *";
+    const values = [payload.name, payload.balance, payload.id];
 
     const queryObject = {
         text : text,
@@ -56,8 +54,8 @@ const editarUsuario = async (payload) =>
 
 const eliminarUsuario = async (payload) =>
 {
-    text = "DELETE FROM usuarios WHERE id = $1";
-    values = [payload.id];
+    const text = "DELETE FROM usuarios WHERE id = $1";
+    const values = [payload.id];
 
     const queryObject = {
         text : text,
@@ -70,8 +68,8 @@ const eliminarUsuario = async (payload) =>
 
 const buscarUsuario1 = async (payload) =>
 {
-    text = "SELECT id FROM usuarios WHERE nombre = $1";
-    values = [payload.emisor];
+    const text = "SELECT id FROM usuarios WHERE nombre = $1";
+    const values = [payload.emisor];
 
     const queryObject = {
         text : text,
@@ -85,8 +83,8 @@ const buscarUsuario1 = async (payload) =>
 
 const buscarUsuario2 = async (payload) =>
 {
-    text = "SELECT id FROM usuarios WHERE nombre = $1";
-    values = [payload.receptor];
+    const text = "SELECT id FROM usuarios WHERE nombre = $1";
+    const values = [payload.receptor];
 
     const queryObject = {
         text : text,
@@ -108,18 +106,18 @@ const insertarTransferencia = async (payload) =>
         await client.query("BEGIN");
 
         //Descontar
-        descontar = "UPDATE usuarios SET balance = balance - $1 WHERE id= $2";
-        values = [payload.monto, payload.idemisor];
-        await client.query(descontar, values);
+        const descontar = "UPDATE usuarios SET balance = balance - $1 WHERE id= $2";
+        const values1 = [payload.monto, payload.idemisor];
+        await client.query(descontar, values1);
 
         //Aumentar
-        aumentar = "UPDATE usuarios SET balance = balance + $1 WHERE id = $2";
-        values = [payload.monto, payload.idreceptor];
-        await client.query(aumentar, values);
+        const aumentar = "UPDATE usuarios SET balance = balance + $1 WHERE id = $2";
+        const values2 = [payload.monto, payload.idreceptor];
+        await client.query(aumentar, values2);
 
         //Insertar Transferencia
-        text = "INSERT INTO transferencias(emisor, receptor, monto, fecha) VALUES($1, $2, $3, $4) RETURNING *";
-        values = [payload.idemisor, payload.idreceptor, payload.monto, payload.fecha];
+        const text = "INSERT INTO transferencias(emisor, receptor, monto, fecha) VALUES($1, $2, $3, $4) RETURNING *";
+        const values = [payload.idemisor, payload.idreceptor, payload.monto, payload.fecha];
         const result = await pool.query(text, values);
     
         //Terminar Transaccion
@@ -140,8 +138,8 @@ const insertarTransferencia = async (payload) =>
 
 const mostrarTransferencias = async () =>
 {
-    text = "SELECT t.id, (e.nombre) as emisor, (r.nombre) as receptor, t.monto, t.fecha FROM transferencias t INNER JOIN usuarios e ON t.emisor = e.id INNER JOIN usuarios r ON t.receptor = r.id ORDER BY t.fecha";
-    values = [];
+    const text = "SELECT t.id, (e.nombre) as emisor, (r.nombre) as receptor, t.monto, t.fecha FROM transferencias t INNER JOIN usuarios e ON t.emisor = e.id INNER JOIN usuarios r ON t.receptor = r.id ORDER BY t.fecha";
+    const values = [];
 
     const queryObject = {
         text : text,

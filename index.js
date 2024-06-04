@@ -1,5 +1,4 @@
 const express = require("express");
-const moment = require("moment");
 const app = express();
 const now = new Date()
 
@@ -104,6 +103,7 @@ app.post("/transferencia", async (req, res) =>
         }
         else
         {
+            res.statusCode = 400;
             console.log("No se puede transferir a la misma cuenta");
         }
         
