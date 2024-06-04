@@ -78,7 +78,7 @@ app.delete("/usuario", async (req, res) =>
     catch (error) 
     {
         res.statusCode = 500
-        res.json({error: 'No fue posible Editar el usuario'})
+        res.json({error: 'No fue posible Eliminar el usuario'})
     }
 });
 
