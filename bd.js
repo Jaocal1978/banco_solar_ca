@@ -1,4 +1,6 @@
+const { now } = require('moment');
 const { Pool } = require('pg');
+
 
 const config = {
     user: process.env.USERDB, 
@@ -100,7 +102,7 @@ const buscarUsuario2 = async (payload) =>
 const insertarTransferencia = async (payload) =>
 {
     const client = await pool.connect();
-
+    
     try 
     {
         await client.query("BEGIN");
@@ -138,7 +140,7 @@ const insertarTransferencia = async (payload) =>
 
 const mostrarTransferencias = async () =>
 {
-    text = "SELECT t.fecha, (e.nombre) as emisor, (r.nombre) as receptor, t.monto FROM transferencias t INNER JOIN usuarios e ON t.emisor = e.id INNER JOIN usuarios r ON t.receptor = r.id ORDER BY t.fecha";
+    text = "SELECT t.id, (e.nombre) as emisor, (r.nombre) as receptor, t.monto, t.fecha FROM transferencias t INNER JOIN usuarios e ON t.emisor = e.id INNER JOIN usuarios r ON t.receptor = r.id ORDER BY t.fecha";
     values = [];
 
     const queryObject = {

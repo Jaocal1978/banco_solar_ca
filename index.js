@@ -1,7 +1,7 @@
 const express = require("express");
 const moment = require("moment");
 const app = express();
-const fechaActual = moment();
+const now = new Date()
 
 const { insertarUsuario, buscarUsuarios, editarUsuario, eliminarUsuario, buscarUsuario1, buscarUsuario2, insertarTransferencia, mostrarTransferencias } = require('./bd');
 
@@ -92,7 +92,7 @@ app.post("/transferencia", async (req, res) =>
     const idemisor = response2.rows[0];
     payload.idemisor = idemisor.id;
     payload.idreceptor = idreceptor.id;
-    const fecha = fechaActual.format("DD/MM/YYYY HH:mm:ss");
+    const fecha = now;
     payload.fecha = fecha;
 
     try 
@@ -121,6 +121,7 @@ app.get("/transferencias", async (req, res) =>
     {
         const response = await mostrarTransferencias();
         res.json(response.rows);
+        console.log(response.rows);
     } 
     catch (error) 
     {
